@@ -25,15 +25,24 @@ public class UsuarioController {
 
     @PostMapping
     public  void insert(@RequestBody Usuario obj){
-        usuarioServ.insert(obj);
+
+    	usuarioServ.insert(obj);
     }
 
-    @DeleteMapping(value = "/{id})")
+    @DeleteMapping(value = "/usuarios/{id}")
     public ResponseEntity <Void> delete (@PathVariable String id){
         usuarioServ.delete(id);
         return ResponseEntity.noContent() // metodo que o RespInt ja com o cod HTTP 204 nocontente
                 .build();
     }
+
+	@PutMapping(value = "/usuarios/{id}")
+	public ResponseEntity<Void> update(@RequestBody Usuario obj, @PathVariable String id){
+    	Usuario objUser = usuarioServ.fromUser(obj); //instancia o objUser com os dados de obj
+    	objUser.setId(id); //seta o id para ter ctza
+    	objUser = usuarioServ.update(objUser); // faz o update
+    	return ResponseEntity.noContent().build(); //retorna codigo http 204
+	}
 
 
 }

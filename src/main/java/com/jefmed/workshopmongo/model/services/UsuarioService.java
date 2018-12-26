@@ -18,26 +18,46 @@ public class UsuarioService {
 
     //metodo responsavel por retornar todos os usuarios do banco
     public List<Usuario> findAll(){
-        return usuarioRepo.findAll();
+
+    	return usuarioRepo.findAll();
     }
 
     //metodo responsavel por encontrar usuario por ID
     public Usuario findById(String id) {
-        Optional<Usuario> obj = usuarioRepo.findById(id);
-        return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado"));
+        Optional<Usuario> obj = usuarioRepo.findById(id); //retorna o usuario por id
+        return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado")); // ou retorna a excessao
     }
 
     //metodo responsavel por inserir novos usuarios
     public Usuario insert(Usuario obj){
-        return usuarioRepo.insert(obj);
+
+    	return usuarioRepo.insert(obj);
     }
 
     //metodo responsavel por deletar usuarios
     public void delete(String id){
-        usuarioRepo.deleteById(id);
+
+    	usuarioRepo.deleteById(id);
     }
 
+	//metodo responsavel por fazer o update em usuario especifico
+	public Usuario update(Usuario obj){
+    	Usuario novoObj = findById(obj.getId());
+    	updateData(novoObj, obj);
+    	return usuarioRepo.save(novoObj);
+	}
 
+	//metodo responsavel por copiar os novos dados de obj para novoobj
+	private void updateData(Usuario novoObj, Usuario obj) {
+    	novoObj.setNome(obj.getNome());
+    	novoObj.setEmail(obj.getEmail());
+	}
+
+
+	// metodo responsavel por retornar os dados d eum usuario
+	public Usuario fromUser(Usuario obj) {
+		return new Usuario(obj.getId(), obj.getNome(), obj.getEmail());
+	}
 
 
 }
