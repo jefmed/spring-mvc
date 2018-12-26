@@ -16,10 +16,10 @@ public class UsuarioController {
     private UsuarioService usuarioServ; //instancia automaticamente o objto (injecao de dependencia)
 
     @GetMapping
-    //ResponseEntity auxilia no retorno de requisições HTTP e possiveis erros
+    //ResponseEntity auxilia no retorno de requisições HTTP e possiveis erros, contemplando: Status code; headers e body
     public ResponseEntity<List<Usuario>> findAll(){
         List<Usuario> list = usuarioServ.findAll(); // busca no BD e guarda na lista/var
-        return ResponseEntity.ok() // metodo q instancia o RespInt ja com cod HTTP de sucesso(200)
+        return ResponseEntity.ok() // Cria uma Build com HttpStatus de sucess(200)
                 .body(list); // define o corpo da resposta
     }
 
@@ -32,8 +32,8 @@ public class UsuarioController {
     @DeleteMapping(value = "/usuarios/{id}")
     public ResponseEntity <Void> delete (@PathVariable String id){
         usuarioServ.delete(id);
-        return ResponseEntity.noContent() // metodo que o RespInt ja com o cod HTTP 204 nocontente
-                .build();
+        return ResponseEntity.noContent() //Cria uma Build com HttpStatus de nonContent (204)
+                .build(); //define o corpo da resposta
     }
 
 	@PutMapping(value = "/usuarios/{id}")
@@ -41,7 +41,8 @@ public class UsuarioController {
     	Usuario objUser = usuarioServ.fromUser(obj); //instancia o objUser com os dados de obj
     	objUser.setId(id); //seta o id para ter ctza
     	objUser = usuarioServ.update(objUser); // faz o update
-    	return ResponseEntity.noContent().build(); //retorna codigo http 204
+    	return ResponseEntity.noContent() //Cria uma Build com HttpStatus de nonContent (204)
+			    .build(); //define o corpo da resposta
 	}
 
 
