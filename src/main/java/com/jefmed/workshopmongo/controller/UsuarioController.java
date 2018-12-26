@@ -4,9 +4,7 @@ import com.jefmed.workshopmongo.model.Usuario;
 import com.jefmed.workshopmongo.model.services.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,4 +22,18 @@ public class UsuarioController {
         return ResponseEntity.ok() // metodo q instancia o RespInt ja com cod HTTP de sucesso(200)
                 .body(list); // define o corpo da resposta
     }
+
+    @PostMapping
+    public  void insert(@RequestBody Usuario obj){
+        usuarioServ.insert(obj);
+    }
+
+    @DeleteMapping(value = "/{id})")
+    public ResponseEntity <Void> delete (@PathVariable String id){
+        usuarioServ.delete(id);
+        return ResponseEntity.noContent() // metodo que o RespInt ja com o cod HTTP 204 nocontente
+                .build();
+    }
+
+
 }
