@@ -11,10 +11,10 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "user") // indica que a classe corresponde a uma colecao no mongodb, caso nao indique o nome da colecao ele ira mapear por um nome igual ao da classe
+@Document(collection = "users") // indica que a classe corresponde a uma colecao no mongodb, caso nao indique o nome da colecao ele ira mapear por um nome igual ao da classe
 public class Usuario implements Serializable {
 //    Para q objts sejam convertidos em bytes para trafegar em redes ou gravados em arquivos
-    private static final long serialVersionUID = 1L;
+//    private static final long serialVersionUID = 1L;
 
     @Id // indica qual atributo sera a PK
     private String id;

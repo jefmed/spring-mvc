@@ -13,50 +13,51 @@ import java.util.Optional;
 public class UsuarioService {
 
     @Autowired // instancia automaticamente o objto (injecao de dependencia)
-    private UsuarioRepository usuarioRepo;
+    private UsuarioRepository usuarioRepository;
 
 
     //metodo responsavel por retornar todos os usuarios do banco
-    public List<Usuario> findAll(){
+    public List<Usuario> findAllUsers(){
 
-    	return usuarioRepo.findAll();
+    	return usuarioRepository.findAll();
     }
 
     //metodo responsavel por encontrar usuario por ID
-    public Usuario findById(String id) {
-        Optional<Usuario> obj = usuarioRepo.findById(id); //retorna o usuario por id
-        return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado")); // ou retorna a excessao
+    public Usuario findUserById(String id) {
+        Optional<Usuario> objetoUsuarioOptional = usuarioRepository.findById(id); //retorna o usuario por id
+        return objetoUsuarioOptional.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado")); // ou retorna a excessao
+
     }
 
     //metodo responsavel por inserir novos usuarios
-    public Usuario insert(Usuario obj){
+    public Usuario insertNovoUsuario(Usuario objetoUsuario){
 
-    	return usuarioRepo.insert(obj);
+    	return usuarioRepository.insert(objetoUsuario);
     }
 
     //metodo responsavel por deletar usuarios
-    public void delete(String id){
+    public void deleteUsuario(String idUsuario){
 
-    	usuarioRepo.deleteById(id);
+    	usuarioRepository.deleteById(idUsuario);
     }
 
 	//metodo responsavel por fazer o update em usuario especifico
-	public Usuario update(Usuario obj){
-    	Usuario novoObj = findById(obj.getId());
-    	updateData(novoObj, obj);
-    	return usuarioRepo.save(novoObj);
+	public Usuario update(Usuario objetoUsuario){
+    	Usuario novoObjetoUsuario = findUserById(objetoUsuario.getId());
+    	updateData(novoObjetoUsuario, objetoUsuario);
+    	return usuarioRepository.save(novoObjetoUsuario);
 	}
 
 	//metodo responsavel por copiar os novos dados de obj para novoobj
-	private void updateData(Usuario novoObj, Usuario obj) {
-    	novoObj.setNome(obj.getNome());
-    	novoObj.setEmail(obj.getEmail());
+	private void updateData(Usuario novoObjetoUsuario, Usuario objetoUsuario) {
+    	novoObjetoUsuario.setNome(objetoUsuario.getNome());
+    	novoObjetoUsuario.setEmail(objetoUsuario.getEmail());
 	}
 
 
 	// metodo responsavel por retornar os dados d eum usuario
-	public Usuario fromUser(Usuario obj) {
-		return new Usuario(obj.getId(), obj.getNome(), obj.getEmail());
+	public Usuario returnFromUser(Usuario objetoUsuario) {
+		return new Usuario(objetoUsuario.getId(), objetoUsuario.getNome(), objetoUsuario.getEmail());
 	}
 
 

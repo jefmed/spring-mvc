@@ -13,34 +13,34 @@ import java.util.List;
 public class UsuarioController {
 
     @Autowired
-    private UsuarioService usuarioServ; //instancia automaticamente o objto (injecao de dependencia)
+    private UsuarioService usuarioService; //instancia automaticamente o objto (injecao de dependencia)
 
     @GetMapping
     //ResponseEntity auxilia no retorno de requisições HTTP e possiveis erros, contemplando: Status code; headers e body
-    public ResponseEntity<List<Usuario>> findAll(){
-        List<Usuario> list = usuarioServ.findAll(); // busca no BD e guarda na lista/var
+    public ResponseEntity<List<Usuario>> findAllUsers(){
+        List<Usuario> listaUsuarios = usuarioService.findAllUsers(); // busca no BD e guarda na lista/var
         return ResponseEntity.ok() // Cria uma Build com HttpStatus de sucess(200)
-                .body(list); // define o corpo da resposta
+                .body(listaUsuarios); // define o corpo da resposta
     }
 
     @PostMapping
-    public  void insert(@RequestBody Usuario obj){
+    public  void insert(@RequestBody Usuario objetoUsuario){
 
-    	usuarioServ.insert(obj);
+    	usuarioService.insertNovoUsuario(objetoUsuario);
     }
 
-    @DeleteMapping(value = "/usuarios/{id}")
-    public ResponseEntity <Void> delete (@PathVariable String id){
-        usuarioServ.delete(id);
+    @DeleteMapping(value = "/usuarios/{idUsuario}")
+    public ResponseEntity <Void> delete (@PathVariable String idUsuario){
+        usuarioService.deleteUsuario(idUsuario);
         return ResponseEntity.noContent() //Cria uma Build com HttpStatus de nonContent (204)
                 .build(); //define o corpo da resposta
     }
 
-	@PutMapping(value = "/usuarios/{id}")
-	public ResponseEntity<Void> update(@RequestBody Usuario obj, @PathVariable String id){
-    	Usuario objUser = usuarioServ.fromUser(obj); //instancia o objUser com os dados de obj
-    	objUser.setId(id); //seta o id para ter ctza
-    	objUser = usuarioServ.update(objUser); // faz o update
+	@PutMapping(value = "/usuarios/{idUsuario}")
+	public ResponseEntity<Void> update(@RequestBody Usuario objetoUsuario, @PathVariable String idUsuario){
+    	Usuario novoObjetoUsuario = usuarioService.returnFromUser(objetoUsuario); //instancia o novoObjetoUsuario com os dados de objetoUsuario
+    	novoObjetoUsuario.setId(idUsuario); //seta o idUsuario para ter ctza
+    	novoObjetoUsuario = usuarioService.update(novoObjetoUsuario); // faz o update
     	return ResponseEntity.noContent() //Cria uma Build com HttpStatus de nonContent (204)
 			    .build(); //define o corpo da resposta
 	}

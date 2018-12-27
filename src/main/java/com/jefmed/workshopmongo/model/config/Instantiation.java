@@ -2,6 +2,7 @@ package com.jefmed.workshopmongo.model.config;
 
 import com.jefmed.workshopmongo.model.Usuario;
 import com.jefmed.workshopmongo.model.repository.UsuarioRepository;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +17,8 @@ public class Instantiation implements CommandLineRunner {
 
 
     @Override
-    public void run(String... args) throws Exception {
+    @SneakyThrows
+    public void run(String... args) {
 
         usuarioRepository.deleteAll(); //limpa a coleção no DB
 
