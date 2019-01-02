@@ -31,13 +31,11 @@ public class UsuarioService {
 
     //metodo responsavel por inserir novos usuarios
     public Usuario insertNovoUsuario(Usuario objetoUsuario){
-
     	return usuarioRepository.insert(objetoUsuario);
     }
 
     //metodo responsavel por deletar usuarios
     public void deleteUsuario(String idUsuario){
-
     	usuarioRepository.deleteById(idUsuario);
     }
 
@@ -54,8 +52,7 @@ public class UsuarioService {
     	novoObjetoUsuario.setEmail(objetoUsuario.getEmail());
 	}
 
-
-	// metodo responsavel por retornar os dados d eum usuario
+	// metodo responsavel por retornar os dados de um usuario
 	public Usuario returnFromUser(Usuario objetoUsuario) {
 		return new Usuario(objetoUsuario.getId(), objetoUsuario.getNome(), objetoUsuario.getEmail());
 	}

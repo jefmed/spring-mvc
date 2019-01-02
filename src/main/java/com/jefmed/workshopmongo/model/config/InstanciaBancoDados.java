@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import java.util.Arrays;
 @Configuration // indica que a classe é uma configuracao
 //classe que popula/instancia o bd
-public class Instantiation implements CommandLineRunner {
+public class InstanciaBancoDados implements CommandLineRunner {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -22,10 +22,10 @@ public class Instantiation implements CommandLineRunner {
 
         usuarioRepository.deleteAll(); //limpa a coleção no DB
 
-        Usuario maria = new Usuario(null, "ana", "ana@gmail.com");
-        Usuario alex = new Usuario(null, "jose", "jose@gmail.com");
-        Usuario bob = new Usuario(null, "nhanha", "nhanha@gmail.com");
+        Usuario ana = new Usuario(null, "ana", "ana@gmail.com");
+        Usuario jose = new Usuario(null, "jose", "jose@gmail.com");
+        Usuario nhanha = new Usuario(null, "nhanha", "nhanha@gmail.com");
 
-        usuarioRepository.saveAll(Arrays.asList(maria, alex, bob));
+        usuarioRepository.saveAll(Arrays.asList(ana, jose, nhanha));
     }
 }

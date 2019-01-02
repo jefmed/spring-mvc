@@ -24,9 +24,10 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public  void insert(@RequestBody Usuario objetoUsuario){
-
-    	usuarioService.insertNovoUsuario(objetoUsuario);
+    public  ResponseEntity<Usuario> insert(@RequestBody Usuario objetoUsuario){
+	   	Usuario user = usuarioService.insertNovoUsuario(objetoUsuario);
+//    	return ResponseEntity.ok().body(usuarioService.insertNovoUsuario(objetoUsuario));
+			   return user != null ? ResponseEntity.ok().body(user) : ResponseEntity.badRequest().body(user); // Cria novo usuario ou caso for nulo, envia badrequest
     }
 
     @DeleteMapping(value = "/usuarios/{idUsuario}")
