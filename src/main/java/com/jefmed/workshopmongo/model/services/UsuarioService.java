@@ -20,7 +20,7 @@ public class UsuarioService {
     	return usuarioRepository.findAll();
     }
 
-    //metodo responsavel por encontrar usuario por ID
+    //metodo responsavel por verificar/encontrar usuario pelo ID, caso nao exista lança uma excessao.
     public Usuario findUserById(String id) {
 	    return usuarioRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("OBJETO COM ID: "+id+", NAO ENCONTRADO!"));
     }
@@ -31,13 +31,14 @@ public class UsuarioService {
     }
 
     //metodo responsavel por deletar usuarios
-    public void deleteUsuario(String idUsuario){
-    	usuarioRepository.deleteById(idUsuario);
+    public void deleteUsuario(String id){
+    	findUserById(id);
+    	usuarioRepository.deleteById(id);
     }
 
 	//metodo responsavel por fazer o update em usuario especifico
-	public Usuario update(Usuario objetoUsuario, String idUsuario){
-    	Usuario novoObjetoUsuario = findUserById(idUsuario);
+	public Usuario update(Usuario objetoUsuario, String id){
+    	Usuario novoObjetoUsuario = findUserById(id);
 		novoObjetoUsuario.setNome(objetoUsuario.getNome());
     	novoObjetoUsuario.setEmail(objetoUsuario.getEmail());
 	    return usuarioRepository.save(novoObjetoUsuario);
