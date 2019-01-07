@@ -3,17 +3,18 @@ package com.jefmed.workshopmongo.model.services;
 import com.jefmed.workshopmongo.model.Usuario;
 import com.jefmed.workshopmongo.model.repository.UsuarioRepository;
 import com.jefmed.workshopmongo.model.services.exception.ObjectNotFoundException;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service // indica que a classe represente um componente ligado a regra de negocio, permitindo sua injecao
+@AllArgsConstructor
 public class UsuarioService {
 
-    @Autowired // instancia automaticamente o objto (injecao de dependencia)
+//    @Autowired // instancia automaticamente o objto (injecao de dependencia)
     private UsuarioRepository usuarioRepository;
-
 
     //metodo responsavel por retornar todos os usuarios do banco
     public List<Usuario> findAllUsers(){

@@ -1,5 +1,7 @@
 package com.jefmed.workshopmongo.controller;
 
+import com.jefmed.workshopmongo.controller.mapper.UsuarioMapper;
+import com.jefmed.workshopmongo.controller.model.request.UsuarioRequest;
 import com.jefmed.workshopmongo.model.Usuario;
 import com.jefmed.workshopmongo.model.services.UsuarioService;
 import com.jefmed.workshopmongo.model.services.exception.ObjectNotFoundException;
@@ -30,8 +32,8 @@ public class  UsuarioController {
 	}
 
     @PostMapping
-    public  ResponseEntity<Usuario> insert(@RequestBody Usuario objetoUsuario){
-	    return ResponseEntity.ok(usuarioService.insertNovoUsuario(objetoUsuario));
+    public  ResponseEntity<Usuario> insert(@RequestBody UsuarioRequest objetoUsuario){
+	    return ResponseEntity.ok(usuarioService.insertNovoUsuario(UsuarioMapper.mapToImpl(objetoUsuario)));
     }
 
     @DeleteMapping("/{id}")
