@@ -1,4 +1,4 @@
-package com.jefmed.workshopmongo.controller.model.request;
+package com.jefmed.workshopmongo.model.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
