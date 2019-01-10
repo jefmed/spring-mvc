@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Api(value = "APi de Cadastro de usuarios")
@@ -36,7 +37,7 @@ public class  UsuarioController {
 
 	@ApiOperation(value = "Inserir um novo usuario")
     @PostMapping
-    public  ResponseEntity<Usuario> insert(@RequestBody UsuarioRequest objetoUsuario){
+    public  ResponseEntity<Usuario> insert(@Valid @RequestBody UsuarioRequest objetoUsuario){
 	    return ResponseEntity.ok(usuarioService.insertNovoUsuario(UsuarioMapper.mapToUser(objetoUsuario)));
     }
 

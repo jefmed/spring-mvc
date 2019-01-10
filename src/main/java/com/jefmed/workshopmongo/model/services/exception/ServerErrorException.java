@@ -2,6 +2,8 @@ package com.jefmed.workshopmongo.model.services.exception;
 
 import org.springframework.http.HttpStatus;
 
+import java.util.Date;
+
 public class ServerErrorException extends ApiException {
 
 	private String error;
@@ -23,6 +25,11 @@ public class ServerErrorException extends ApiException {
 	@Override
 	public Integer getCode() {
 		return 10;
+	}
+
+	@Override
+	public Long getTimeStamp() {
+		return new Date().getTime();
 	}
 
 	@Override

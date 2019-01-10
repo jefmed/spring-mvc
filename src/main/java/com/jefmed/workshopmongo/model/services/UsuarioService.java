@@ -2,10 +2,11 @@ package com.jefmed.workshopmongo.model.services;
 
 import com.jefmed.workshopmongo.model.Usuario;
 import com.jefmed.workshopmongo.model.repository.UsuarioRepository;
+import com.jefmed.workshopmongo.model.services.exception.MethodArgumentNotValidException;
 import com.jefmed.workshopmongo.model.services.exception.ObjectNotFoundException;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.FieldError;
 
 import java.util.List;
 
@@ -23,12 +24,12 @@ public class UsuarioService {
 
     //metodo responsavel por verificar/encontrar usuario pelo ID, caso nao exista lança uma excessao.
     public Usuario findUserById(String id) {
-	    return usuarioRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("OBJETO COM ID: "+id+", NAO ENCONTRADO!"));
+	    return usuarioRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("ID: >>>>>>> "));
     }
 
     //metodo responsavel por inserir novos usuarios
-    public Usuario insertNovoUsuario(Usuario objetoUsuario){
-    	return usuarioRepository.insert(objetoUsuario);
+    public Usuario insertNovoUsuario(Usuario objetoUsuario) {
+		return usuarioRepository.insert(objetoUsuario);
     }
 
     //metodo responsavel por deletar usuarios

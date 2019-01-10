@@ -14,5 +14,6 @@ public class ApiExceptionModel {
 	private String message;
 	private String detail;
 	private Integer code;
+	private Long timestamp;
 
 }

@@ -10,6 +10,8 @@ public abstract class ApiException extends RuntimeException {
 
 	public abstract Integer getCode();
 
+	public abstract Long getTimeStamp();
+
 	public abstract HttpStatus getHttpStatus();
 
 }
