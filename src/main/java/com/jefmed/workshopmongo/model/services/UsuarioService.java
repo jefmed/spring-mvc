@@ -2,6 +2,7 @@ package com.jefmed.workshopmongo.model.services;
 
 import com.jefmed.workshopmongo.model.Usuario;
 import com.jefmed.workshopmongo.model.repository.UsuarioRepository;
+import com.jefmed.workshopmongo.model.services.error.ResourceNotFoundException;
 import com.jefmed.workshopmongo.model.services.exception.MethodArgumentNotValidException;
 import com.jefmed.workshopmongo.model.services.exception.ObjectNotFoundException;
 import lombok.AllArgsConstructor;
@@ -24,7 +25,7 @@ public class UsuarioService {
 
     //metodo responsavel por verificar/encontrar usuario pelo ID, caso nao exista lança uma excessao.
     public Usuario findUserById(String id) {
-	    return usuarioRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("ID: >>>>>>> "));
+	    return usuarioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("USUARIO NAO ENCONTRADO PARA ID: "+id));
     }
 
     //metodo responsavel por inserir novos usuarios
