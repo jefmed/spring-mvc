@@ -33,20 +33,18 @@ public class  UsuarioController {
 		List<UsuarioRequest> usuarioRequests = new ArrayList<>();
         List<Usuario> listaUsuarios = usuarioService.findAllUsers(); // busca no BD e guarda na Var.listaUsuarios
 		listaUsuarios.forEach(usuario ->{
-			UsuarioRequest usuarioRequest = UsuarioMapper.userToMap(usuario);
+			UsuarioRequest usuarioRequest = UsuarioMapper.mapToUsuarioRequest(usuario);
 			usuarioRequest.add(linkTo(methodOn(UsuarioController.class).getUserById(usuario.getId())).withSelfRel());
 			usuarioRequests.add(usuarioRequest);
 		});
-        return usuarioRequests != null ? ResponseEntity.ok(usuarioRequests) : ResponseEntity.notFound().build();
-//		return ResponseEntity.ok(listaUsuarios);
+        return ResponseEntity.ok(usuarioRequests);
     }
-
 
 	@ApiOperation(value = "Retorna um usuario especifico")
 	@GetMapping("/{id}")
 	public ResponseEntity<UsuarioRequest> getUserById(@PathVariable String id){
 		Usuario usuario = usuarioService.findUserById(id);
-		UsuarioRequest usuarioRequest = UsuarioMapper.userToMap(usuario);
+		UsuarioRequest usuarioRequest = UsuarioMapper.mapToUsuarioRequest(usuario);
 		usuarioRequest.add(linkTo(methodOn(UsuarioController.class).findAllUsers()).withRel("Lista de Usuarios"));
     	return ResponseEntity.ok(usuarioRequest);
 	}
@@ -54,7 +52,7 @@ public class  UsuarioController {
 	@ApiOperation(value = "Inserir um novo usuario")
     @PostMapping
     public  ResponseEntity<Usuario> insert(@Valid @RequestBody UsuarioRequest objetoUsuario){
-	    return ResponseEntity.ok(usuarioService.insertNovoUsuario(UsuarioMapper.mapToUser(objetoUsuario)));
+	    return ResponseEntity.ok(usuarioService.insertNovoUsuario(UsuarioMapper.mapToUsuario(objetoUsuario)));
     }
 
 	@ApiOperation(value = "Deleta um usuario")
@@ -68,7 +66,7 @@ public class  UsuarioController {
 	@ApiOperation(value = "Altera um usuario ja existente")
 	@PutMapping("/{id}")
 	public ResponseEntity<Void> update(@RequestBody UsuarioRequest objetoUsuario, @PathVariable String id){
-    	usuarioService.update(UsuarioMapper.mapToUser(objetoUsuario), id);
+    	usuarioService.update(UsuarioMapper.mapToUsuario(objetoUsuario), id);
 		return ResponseEntity.noContent().build();
 	}
 

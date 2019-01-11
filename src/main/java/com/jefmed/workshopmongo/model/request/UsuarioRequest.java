@@ -15,7 +15,6 @@ import javax.validation.constraints.NotEmpty;
 public class UsuarioRequest extends ResourceSupport {
 
 
-	@NotEmpty(message = "Campo ID nao pode ser cazio!")
 	private String identity;
 
 	@NotEmpty(message = "O campo nome nao pode ser vazio!")

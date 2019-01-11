@@ -5,7 +5,7 @@ import com.jefmed.workshopmongo.model.Usuario;
 
 public class UsuarioMapper {
 
-	public static Usuario mapToUser(UsuarioRequest usuarioRequest) {
+	public static Usuario mapToUsuario(UsuarioRequest usuarioRequest) {
 		if(usuarioRequest == null) return null;
 		return Usuario.builder()
 				.id(usuarioRequest.getIdentity())
@@ -13,7 +13,7 @@ public class UsuarioMapper {
 				.email(usuarioRequest.getEmail())
 				.build();
 	}
-	public static UsuarioRequest userToMap(Usuario usuario) {
+	public static UsuarioRequest mapToUsuarioRequest(Usuario usuario) {
 		if(usuario == null) return null;
 		return UsuarioRequest.builder()
 				.identity(usuario.getId())
