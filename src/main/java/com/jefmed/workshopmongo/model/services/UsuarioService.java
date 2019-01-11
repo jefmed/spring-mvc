@@ -3,11 +3,8 @@ package com.jefmed.workshopmongo.model.services;
 import com.jefmed.workshopmongo.model.Usuario;
 import com.jefmed.workshopmongo.model.repository.UsuarioRepository;
 import com.jefmed.workshopmongo.model.services.error.ResourceNotFoundException;
-import com.jefmed.workshopmongo.model.services.exception.MethodArgumentNotValidException;
-import com.jefmed.workshopmongo.model.services.exception.ObjectNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.FieldError;
 
 import java.util.List;
 

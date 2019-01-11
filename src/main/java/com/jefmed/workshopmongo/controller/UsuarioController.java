@@ -1,38 +1,54 @@
 package com.jefmed.workshopmongo.controller;
 
 import com.jefmed.workshopmongo.controller.mapper.UsuarioMapper;
-import com.jefmed.workshopmongo.model.request.UsuarioRequest;
 import com.jefmed.workshopmongo.model.Usuario;
+import com.jefmed.workshopmongo.model.request.UsuarioRequest;
 import com.jefmed.workshopmongo.model.services.UsuarioService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
+
 
 @Api(value = "APi de Cadastro de usuarios")
 @RestController // indica que a classe é responsavel por requisiçoes vindas do cliente e q eh um recurso Rest
 @RequestMapping("/usuarios") //indica o caminho do endpoint, e qual classe sera usada.
+@AllArgsConstructor
 public class  UsuarioController {
 
-    @Autowired
+//    @Autowired
     private UsuarioService usuarioService; //instancia automaticamente o objto (injecao de dependencia)
 
 	@ApiOperation(value = "Retorna uma lista de todos os usuarios cadastrados")
     @GetMapping
     //ResponseEntity auxilia no retorno de requisições HTTP e possiveis erros, contemplando: Status code; headers e body
-    public ResponseEntity<List<Usuario>> findAllUsers(){
+    public ResponseEntity<List<UsuarioRequest>> findAllUsers(){
+		List<UsuarioRequest> usuarioRequests = new ArrayList<>();
         List<Usuario> listaUsuarios = usuarioService.findAllUsers(); // busca no BD e guarda na Var.listaUsuarios
-        return listaUsuarios != null ? ResponseEntity.ok(listaUsuarios) : ResponseEntity.notFound().build();
+		listaUsuarios.forEach(usuario ->{
+			UsuarioRequest usuarioRequest = UsuarioMapper.userToMap(usuario);
+			usuarioRequest.add(linkTo(methodOn(UsuarioController.class).getUserById(usuario.getId())).withSelfRel());
+			usuarioRequests.add(usuarioRequest);
+		});
+        return usuarioRequests != null ? ResponseEntity.ok(usuarioRequests) : ResponseEntity.notFound().build();
+//		return ResponseEntity.ok(listaUsuarios);
     }
+
 
 	@ApiOperation(value = "Retorna um usuario especifico")
 	@GetMapping("/{id}")
-	public ResponseEntity<Usuario> getUserById(@PathVariable String id){
-    	return ResponseEntity.ok(usuarioService.findUserById(id));
+	public ResponseEntity<UsuarioRequest> getUserById(@PathVariable String id){
+		Usuario usuario = usuarioService.findUserById(id);
+		UsuarioRequest usuarioRequest = UsuarioMapper.userToMap(usuario);
+		usuarioRequest.add(linkTo(methodOn(UsuarioController.class).findAllUsers()).withRel("Lista de Usuarios"));
+    	return ResponseEntity.ok(usuarioRequest);
 	}
 
 	@ApiOperation(value = "Inserir um novo usuario")
