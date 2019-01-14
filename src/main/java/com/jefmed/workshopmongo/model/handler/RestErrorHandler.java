@@ -7,7 +7,6 @@ import com.jefmed.workshopmongo.model.services.error.ValidationErrorDetails;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.lang.Nullable;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -16,7 +15,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,7 +25,7 @@ public class RestErrorHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(ResourceNotFoundException.class)
 	public ResponseEntity<?> handleResourceNotFoundException(ResourceNotFoundException rfnException){
 		ResourceNotFoundDetails rfnDetails = ResourceNotFoundDetails.rnfBuilder()
-				.timestamp(new Date().getTime())
+				.timestamp(LocalDateTime.now())
 				.status(HttpStatus.NOT_FOUND.value())
 				.title("RESOURCE NOT FOUND")
 				.detail(rfnException.getMessage()) // pega a mensagem informada no erro
@@ -41,15 +40,15 @@ public class RestErrorHandler extends ResponseEntityExceptionHandler {
 		String fields = fieldErrors.stream().map(FieldError::getField).collect(Collectors.joining(" , "));
 		String fieldMessage = fieldErrors.stream().map(FieldError::getDefaultMessage).collect(Collectors.joining(" , "));
 		ValidationErrorDetails manvDetails = ValidationErrorDetails.validationBuilder()
-				.timestamp(new Date().getTime())
-				.status(HttpStatus.BAD_REQUEST.value())
+				.timestamp(LocalDateTime.now())
+				.status(status.value())
 				.title("FIELD VALIDATION ERROR")
-				.detail("FIELD VALIDATION ERROR")
+				.detail("ERROR >>>>> FIELD VALIDATION ERROR")
 				.developerMessage(manvException.getClass().getName()) // pega o tipo de erro
 				.field(fields)
 				.fieldMessage(fieldMessage)
 				.build();
-		return new ResponseEntity<>(manvDetails, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(manvDetails, status);
 	}
 
 /*	@Override
@@ -69,7 +68,7 @@ public class RestErrorHandler extends ResponseEntityExceptionHandler {
 			Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
 
 		ErrorDetails errorDetails = ErrorDetails.builder()
-				.timestamp(new Date().getTime())
+				.timestamp(LocalDateTime.now())
 				.status(status.value())
 				.title("INTERNAL EXCEPTION")
 				.detail(ex.getMessage()) // pega a mensagem informada no erro

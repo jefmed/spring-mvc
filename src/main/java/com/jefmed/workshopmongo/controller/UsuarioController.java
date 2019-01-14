@@ -31,7 +31,7 @@ public class  UsuarioController {
     //ResponseEntity auxilia no retorno de requisições HTTP e possiveis erros, contemplando: Status code; headers e body
     public ResponseEntity<List<UsuarioRequest>> findAllUsers(){
 		List<UsuarioRequest> usuarioRequests = new ArrayList<>();
-        List<Usuario> listaUsuarios = usuarioService.findAllUsers(); // busca no BD e guarda na Var.listaUsuarios
+		List<Usuario> listaUsuarios = usuarioService.findAllUsers(); // busca no BD e guarda na Var.listaUsuarios
 		listaUsuarios.forEach(usuario ->{
 			UsuarioRequest usuarioRequest = UsuarioMapper.mapToUsuarioRequest(usuario);
 			usuarioRequest.add(linkTo(methodOn(UsuarioController.class).getUserById(usuario.getId())).withSelfRel());
@@ -51,8 +51,11 @@ public class  UsuarioController {
 
 	@ApiOperation(value = "Inserir um novo usuario")
     @PostMapping
-    public  ResponseEntity<Usuario> insert(@Valid @RequestBody UsuarioRequest objetoUsuario){
-	    return ResponseEntity.ok(usuarioService.insertNovoUsuario(UsuarioMapper.mapToUsuario(objetoUsuario)));
+    public  ResponseEntity<UsuarioRequest> insert(@Valid @RequestBody UsuarioRequest objetoUsuario){
+		Usuario usuario = usuarioService.insertNovoUsuario(UsuarioMapper.mapToUsuario(objetoUsuario));
+		UsuarioRequest usuarioRequest = UsuarioMapper.mapToUsuarioRequest(usuario);
+		usuarioRequest.add(linkTo(methodOn(UsuarioController.class).getUserById(usuario.getId())).withSelfRel());
+		return ResponseEntity.ok(usuarioRequest);
     }
 
 	@ApiOperation(value = "Deleta um usuario")
