@@ -2,13 +2,14 @@ package com.jefmed.workshopmongo.model.services.error;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class ResourceNotFoundDetails extends ErrorDetails {
 
 	@Builder(builderMethodName = "rnfBuilder")

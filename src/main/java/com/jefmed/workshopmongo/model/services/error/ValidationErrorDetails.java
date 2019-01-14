@@ -2,13 +2,14 @@ package com.jefmed.workshopmongo.model.services.error;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class ValidationErrorDetails extends ErrorDetails {
 	private String field;
 	private String fieldMessage;

@@ -7,12 +7,14 @@ import com.jefmed.workshopmongo.model.services.UsuarioService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 
@@ -60,17 +62,21 @@ public class  UsuarioController {
 
 	@ApiOperation(value = "Deleta um usuario")
     @DeleteMapping("/{id}")
-    public ResponseEntity <Void> delete (@PathVariable String id){
+    public ResponseEntity <?> delete (@PathVariable String id){
+		Usuario usuariocp = usuarioService.findUserById(id);
         usuarioService.deleteUsuario(id);
-        return ResponseEntity.noContent() //Cria uma Response com HttpStatus de nonContent (204)
-                .build(); // constroi uma resposta sem corpo e retorna o tipo declarado
+        UsuarioRequest usuarioRequestcp = UsuarioMapper.mapToUsuarioRequest(usuariocp);
+        usuarioRequestcp.add(linkTo(methodOn(UsuarioController.class).findAllUsers()).withRel("Lista de usuarios"));
+        return ResponseEntity.ok(usuarioRequestcp);
     }
 
 	@ApiOperation(value = "Altera um usuario ja existente")
 	@PutMapping("/{id}")
-	public ResponseEntity<Void> update(@RequestBody UsuarioRequest objetoUsuario, @PathVariable String id){
-    	usuarioService.update(UsuarioMapper.mapToUsuario(objetoUsuario), id);
-		return ResponseEntity.noContent().build();
+	public ResponseEntity<UsuarioRequest> update(@RequestBody UsuarioRequest objetoUsuario, @PathVariable String id){
+    	Usuario usuario = usuarioService.update(UsuarioMapper.mapToUsuario(objetoUsuario), id);
+    	UsuarioRequest usuarioRequest = UsuarioMapper.mapToUsuarioRequest(usuario);
+    	usuarioRequest.add(linkTo(methodOn(UsuarioController.class).getUserById(usuario.getId())).withSelfRel());
+		return ResponseEntity.ok(usuarioRequest);
 	}
 
 
