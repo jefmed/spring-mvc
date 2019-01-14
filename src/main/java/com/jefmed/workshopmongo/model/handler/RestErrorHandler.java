@@ -7,6 +7,7 @@ import com.jefmed.workshopmongo.model.services.error.ValidationErrorDetails;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.lang.Nullable;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -54,13 +55,13 @@ public class RestErrorHandler extends ResponseEntityExceptionHandler {
 /*	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
 		ErrorDetails errorDetails = ErrorDetails.builder()
-				.timestamp(new Date().getTime())
-				.status(HttpStatus.BAD_REQUEST.value())
+				.timestamp(LocalDateTime.now())
+				.status(status.value())
 				.title("RESOURCE NOT FOUND")
 				.detail(ex.getMessage()) // pega a mensagem informada no erro
 				.developerMessage(ex.getClass().getName()) // pega o tipo de erro
 				.build();
-		return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(errorDetails, headers, status);
 	}*/
 
 	@Override

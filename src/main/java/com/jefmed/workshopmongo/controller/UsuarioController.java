@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 
 
-@Api(value = "APi de Cadastro de usuarios")
+@Api(value = "API de Cadastro de usuarios")
 @RestController // indica que a classe é responsavel por requisiçoes vindas do cliente e q eh um recurso Rest
 @RequestMapping("/usuarios") //indica o caminho do endpoint, e qual classe sera usada.
 @AllArgsConstructor
