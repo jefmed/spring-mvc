@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service // indica que a classe represente um componente ligado a regra de negocio, permitindo sua injecao
 @AllArgsConstructor
@@ -23,6 +24,11 @@ public class UsuarioService {
     //metodo responsavel por verificar/encontrar usuario pelo ID, caso nao exista lança uma excessao.
     public Usuario findUserById(String id) {
 	    return usuarioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("USUARIO NAO ENCONTRADO PARA ID: "+id));
+    }
+
+//     metodo responsavel por achar um usuario pelo nome
+    public Optional<Usuario> findByName(String nome){
+        return findAllUsers().stream().filter(usuario -> usuario.getNome().equalsIgnoreCase(nome)).findFirst();
     }
 
     //metodo responsavel por inserir novos usuarios

@@ -1,5 +1,6 @@
 package com.jefmed.workshopmongo.model.request;
 
+import com.jefmed.workshopmongo.model.validators.UsuarioUnico;
 import lombok.*;
 import org.springframework.hateoas.ResourceSupport;
 
@@ -17,6 +18,7 @@ public class UsuarioRequest extends ResourceSupport {
 	private String identity;
 
 	@NotEmpty(message = "O campo nome nao pode ser vazio!")
+	@UsuarioUnico
 	private String nome;
 
 	@Email(regexp = "[A-Za-z0-9._-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}", message = "É necessário informar um e-mail válido!")
