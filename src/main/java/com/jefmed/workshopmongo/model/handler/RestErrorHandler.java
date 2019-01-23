@@ -44,7 +44,7 @@ public class RestErrorHandler extends ResponseEntityExceptionHandler {
 				.timestamp(LocalDateTime.now())
 				.status(status.value())
 				.title("FIELD VALIDATION ERROR")
-				.detail("ERROR >>>>> FIELD VALIDATION ERROR")
+				.detail(manvException.getMessage()) //"ERROR >>>>> FIELD VALIDATION ERROR"
 				.developerMessage(manvException.getClass().getName()) // pega o tipo de erro
 				.field(fields)
 				.fieldMessage(fieldMessage)
