@@ -5,6 +5,7 @@ import com.jefmed.workshopmongo.model.repository.UsuarioRepository;
 import com.jefmed.workshopmongo.model.services.error.ResourceNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -13,8 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 //@RunWith(MockitoJUnitRunner.class)
@@ -96,9 +96,18 @@ public class UsuarioServiceTest {
 
     @Test // PERGUNTAR P MATHEUS METODO MAIS EFICIENTE
     public void deve_DeletarUmUsuario_Quando_InformadoId() {
+//        when(usuarioRepository.findById(usuario1.getId())).thenReturn(Optional.of(usuario1));
+//        usuarioService.deleteUsuario(usuario1.getId());
+//        verify(usuarioRepository, times(1)).deleteById("1");
+
         when(usuarioRepository.findById(usuario1.getId())).thenReturn(Optional.of(usuario1));
-        usuarioService.deleteUsuario(usuario1.getId());
-        verify(usuarioRepository, times(1)).deleteById("1");
+        usuarioService.deleteUsuario("1");
+
+        ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
+        verify(usuarioRepository).deleteById(argumentCaptor.capture());
+        String usuarioReturn = argumentCaptor.getValue();
+
+        assertEquals(usuarioReturn, usuario1.getId());
     }
 
     @Test
