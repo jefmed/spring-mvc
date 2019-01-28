@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,31 +54,43 @@ public class  UsuarioController {
 
 	@ApiOperation(value = "Inserir um novo usuario")
     @PostMapping
-    public  ResponseEntity<UsuarioRequest> insert(@Valid @RequestBody UsuarioRequest objetoUsuario){
+	public  ResponseEntity<UsuarioRequest> insert(@Valid @RequestBody UsuarioRequest objetoUsuario) throws URISyntaxException {
+		Usuario usuario = usuarioService.insertNovoUsuario((UsuarioMapper.mapToUsuario(objetoUsuario)));
+		return ResponseEntity.created(new URI(usuario.getId())).build();
+	}
+    /*public  ResponseEntity<UsuarioRequest> insert(@Valid @RequestBody UsuarioRequest objetoUsuario){
 		Usuario usuario = usuarioService.insertNovoUsuario(UsuarioMapper.mapToUsuario(objetoUsuario));
 		UsuarioRequest usuarioRequest = UsuarioMapper.mapToUsuarioRequest(usuario);
 		usuarioRequest.add(linkTo(methodOn(UsuarioController.class).getUserById(usuario.getId())).withSelfRel());
 		return ResponseEntity.ok(usuarioRequest);
-    }
+    }*/
 
 	@ApiOperation(value = "Deleta um usuario")
     @DeleteMapping("/{id}")
-    public ResponseEntity <?> delete (@PathVariable String id){
+	public ResponseEntity<Void> delete(@PathVariable String id){
+		usuarioService.deleteUsuario(id);
+		return ResponseEntity.noContent().build();
+	}
+    /*public ResponseEntity <?> delete (@PathVariable String id){
 		Usuario usuariocp = usuarioService.findUserById(id);
         usuarioService.deleteUsuario(id);
         UsuarioRequest usuarioRequestcp = UsuarioMapper.mapToUsuarioRequest(usuariocp);
         usuarioRequestcp.add(linkTo(methodOn(UsuarioController.class).findAllUsers()).withRel("Lista de usuarios"));
         return ResponseEntity.ok(usuarioRequestcp);
-    }
+    }*/
 
 	@ApiOperation(value = "Altera um usuario ja existente")
 	@PutMapping("/{id}")
 	public ResponseEntity<UsuarioRequest> update(@RequestBody UsuarioRequest objetoUsuario, @PathVariable String id){
+		usuarioService.update(UsuarioMapper.mapToUsuario(objetoUsuario), id);
+		return ResponseEntity.noContent().build();
+	}
+	/*public ResponseEntity<UsuarioRequest> update(@RequestBody UsuarioRequest objetoUsuario, @PathVariable String id){
     	Usuario usuario = usuarioService.update(UsuarioMapper.mapToUsuario(objetoUsuario), id);
     	UsuarioRequest usuarioRequest = UsuarioMapper.mapToUsuarioRequest(usuario);
     	usuarioRequest.add(linkTo(methodOn(UsuarioController.class).getUserById(usuario.getId())).withSelfRel());
 		return ResponseEntity.ok(usuarioRequest);
-	}
+	}*/
 
 
 }

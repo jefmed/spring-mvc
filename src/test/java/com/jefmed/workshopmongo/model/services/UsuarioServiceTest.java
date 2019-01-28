@@ -102,12 +102,9 @@ public class UsuarioServiceTest {
 
         when(usuarioRepository.findById(usuario1.getId())).thenReturn(Optional.of(usuario1));
         usuarioService.deleteUsuario("1");
-
         ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
         verify(usuarioRepository).deleteById(argumentCaptor.capture());
-        String usuarioReturn = argumentCaptor.getValue();
-
-        assertEquals(usuarioReturn, usuario1.getId());
+        assertEquals(argumentCaptor.getValue(), usuario1.getId());
     }
 
     @Test
