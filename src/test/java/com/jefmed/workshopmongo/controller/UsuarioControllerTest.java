@@ -1,24 +1,22 @@
 package com.jefmed.workshopmongo.controller;
 
-import com.google.gson.Gson;
-import com.jefmed.workshopmongo.controller.mapper.UsuarioMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jefmed.workshopmongo.model.Usuario;
-import com.jefmed.workshopmongo.model.request.UsuarioRequest;
 import com.jefmed.workshopmongo.model.services.UsuarioService;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.mockito.ArgumentMatchers;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,31 +24,37 @@ import java.util.List;
 import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
-@AutoConfigureMockMvc
+//@SpringBootTest
+//@AutoConfigureMockMvc
+@WebMvcTest(controllers = UsuarioController.class)
 public class UsuarioControllerTest {
 
-
+    @Autowired
     private MockMvc mockMvc;
 
-    @Mock
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @MockBean
     private UsuarioService usuarioService;
 
-    @InjectMocks
-    private UsuarioController usuarioController;
+//    @Autowired
+//    private WebApplicationContext context;
+
+//    @MockBean
+//    private UsuarioRepository usuarioRepository;
+
+//    @InjectMocks
+//    private UsuarioController usuarioController;
 
 
-    private static UsuarioRequest usuarioRequest10 = UsuarioRequest.builder()
-            .identity("10")
-            .nome("usuarioRequest10")
-            .email("usuarioRequest10@hotmail.com")
-            .build();
+    @Before
+    public void setUp(){
+        MockitoAnnotations.initMocks(this);
+//        mockMvc = MockMvcBuilders.standaloneSetup(new UsuarioController()).build();
+//        mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
+    }
 
-    private static UsuarioRequest usuarioRequest20 = UsuarioRequest.builder()
-            .identity("20")
-            .nome("usuarioRequest20")
-            .email("usuarioRequest20@hotmail.com")
-            .build();
 
     private static Usuario usuario1 = Usuario.builder()
             .id("1")
@@ -73,18 +77,8 @@ public class UsuarioControllerTest {
             .email("usuario4@gmail.com")
             .build();
 
-    public static String convertUsingGson(Usuario usuario)
-    {
-        Gson gson = new Gson();
-        String usuarioJson = gson.toJson(usuario);
-        return usuarioJson;
-    }
 
-    @Before
-    public void setUp(){
-        MockitoAnnotations.initMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(usuarioController).build();
-    }
+
 
     @Test
     public void deve_RetornarTodosUsuarios() throws Exception {
@@ -92,54 +86,48 @@ public class UsuarioControllerTest {
         usuarioList.add(usuario1);
         usuarioList.add(usuario2);
         when(usuarioService.findAllUsers()).thenReturn(usuarioList);
+
         mockMvc.perform(
-                MockMvcRequestBuilders.get("/usuarios"))
+                MockMvcRequestBuilders.get("/usuarios").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(2)));
     }
 
+
     @Test
     public void deve_RetornarUmUsuario_quando_InformadoId() throws Exception {
-        when(usuarioService.findUserById(usuario1.getId())).thenReturn(usuario1);
-        mockMvc.perform(MockMvcRequestBuilders.get("/{id}", "1"))
+       when(usuarioService.findUserById(usuario1.getId())).thenReturn(usuario1);
+        mockMvc.perform(MockMvcRequestBuilders.get("/usuarios/{id}", "1"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
+
     @Test
     public void deve_InserirUmNovoUsuario() throws Exception {
-
-        //language=JSON
-        String json = "{\n" +
-                "  \"id\" : \"1\",\n" +
-                "  \"nome\" : \"joaquim\",\n" +
-                "  \"email\" : \"joaquim@gmail.com\"\n" +
-                "}";
-
-
-
-       when(usuarioService.insertNovoUsuario(UsuarioMapper.mapToUsuario(usuarioRequest10))).thenReturn(usuario1);
-//        Usuario usuario = usuarioService.insertNovoUsuario();
-//        String usuarioJson = convertUsingGson(usuario);
-
-
-//        mockMvc.perform(MockMvcRequestBuilders.post("/usuarios")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(usuarioJson))
-//                .andExpect(MockMvcResultMatchers.status().isCreated());
+        when(usuarioService.insertNovoUsuario(ArgumentMatchers.any(Usuario.class))).thenReturn(usuario1);
+        mockMvc.perform(MockMvcRequestBuilders.post("/usuarios")
+                .content(objectMapper.writeValueAsString(usuario1))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isCreated());
     }
+
 
     @Test
     public void deve_DeletarUmUsuarioExistente() throws Exception {
-        when(usuarioService.findUserById(usuario1.getId())).thenReturn(usuario1);
-        doNothing().when(usuarioService).deleteUsuario(usuario1.getId());
-        mockMvc.perform(MockMvcRequestBuilders.delete("/{id}", usuario1.getId())).andExpect(MockMvcResultMatchers.status().isNoContent());
-        verify(usuarioService, times(1)).findUserById(usuario1.getId());
+        mockMvc.perform(MockMvcRequestBuilders.delete("/usuarios/{id}", usuario1.getId())).andExpect(MockMvcResultMatchers.status().isNoContent());
         verify(usuarioService, times(1)).deleteUsuario(usuario1.getId());
     }
 
+
     @Test
-    public void deve_FazerUpdate_Quando_UsuarioExistir() {
+    public void deve_FazerUpdate_Quando_UsuarioExistir() throws Exception {
+        when(usuarioService.update(usuario4, usuario1.getId())).thenReturn(usuario1);
+        mockMvc.perform(MockMvcRequestBuilders.put("/usuarios/{id}", usuario1.getId())
+                .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(usuario1)))
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
+
     }
+
 
 //    @Test(expected = ResourceNotFoundException.class)
 //    public void deve_RetornarException_Quando_UsuarioExistir() {
