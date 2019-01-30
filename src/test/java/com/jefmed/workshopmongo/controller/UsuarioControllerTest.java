@@ -86,7 +86,6 @@ public class UsuarioControllerTest {
         usuarioList.add(usuario1);
         usuarioList.add(usuario2);
         when(usuarioService.findAllUsers()).thenReturn(usuarioList);
-
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/usuarios").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -114,14 +113,14 @@ public class UsuarioControllerTest {
 
     @Test
     public void deve_DeletarUmUsuarioExistente() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/usuarios/{id}", usuario1.getId())).andExpect(MockMvcResultMatchers.status().isNoContent());
+        mockMvc.perform(MockMvcRequestBuilders.delete("/usuarios/{id}", usuario1.getId()))
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
         verify(usuarioService, times(1)).deleteUsuario(usuario1.getId());
     }
 
 
     @Test
     public void deve_FazerUpdate_Quando_UsuarioExistir() throws Exception {
-        when(usuarioService.update(usuario4, usuario1.getId())).thenReturn(usuario1);
         mockMvc.perform(MockMvcRequestBuilders.put("/usuarios/{id}", usuario1.getId())
                 .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(usuario1)))
                 .andExpect(MockMvcResultMatchers.status().isNoContent());
